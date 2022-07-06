@@ -288,12 +288,42 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 
 	//頂点データ
+
 	Vertex vertices[] =
 	{
-		{{ -50.0f,-50.0f,+0.0f},   {0.0f,1.0f}},//左下 インデックス0
-		{{ -50.0f,+50.0f,+0.0f},   {0.0f,0.0f}},//左上 インデックス1
-		{{ +50.0f,-50.0f,+0.0f},   {1.0f,1.0f}},//右下 インデックス2
-		{{ +50.0f,+50.0f,+0.0f},   {1.0f,0.0f}},//右上 インデックス3
+		//前
+		{{ -5.0f,-5.0f,-5.0f},   {0.0f,1.0f}},//左下 インデックス0
+		{{ -5.0f,+5.0f,-5.0f},   {0.0f,0.0f}},//左上 インデックス1
+		{{ 5.0f,-5.0f, -5.0f},   {1.0f,1.0f}},//右下 インデックス2
+		{{ +5.0f,+5.0f,-5.0f},   {1.0f,0.0f}},//右上 インデックス3
+		//後
+		{{ -5.0f,-5.0f,+5.0f},   {0.0f,1.0f}},//左下 インデックス0
+		{{ -5.0f,+5.0f,+5.0f},   {0.0f,0.0f}},//左上 インデックス1
+		{{ 5.0f,-5.0f, +5.0f},   {1.0f,1.0f}},//右下 インデックス2
+		{{ +5.0f,+5.0f,+5.0f},   {1.0f,0.0f}},//右上 インデックス3
+
+		//左
+		{{ 5.0f,-5.0f,-5.0f},   {0.0f,1.0f}},//左下 インデックス0
+		{{ 5.0f,5.0f,-5.0f},   {0.0f,0.0f}},//左上 インデックス1
+		{{ 5.0f,-5.0f, +5.0f},   {1.0f,1.0f}},//右下 インデックス2
+		{{ 5.0f,+5.0f,+5.0f},   {1.0f,0.0f}},//右上 インデックス3
+
+		//右
+		{{ -5.0f,-5.0f,5.0f},   {0.0f,1.0f}},//左下 インデックス0
+		{{ -5.0f, 5.0f,+5.0f},   {0.0f,0.0f}},//左上 インデックス1
+		{{ -5.0f,-5.0f, -5.0f},  {1.0f,1.0f}},//右下 インデックス2
+		{{ -5.0f,+5.0f,-5.0f},   {1.0f,0.0f}},//右上 インデックス3
+		//上
+		{{ -5.0f,5.0f,5.0f},   {0.0f,1.0f}},//左下 インデックス0
+		{{ 5.0f ,5.0f,5.0f},   {0.0f,0.0f}},//左上 インデックス1
+		{{ -5.0f,5.0f, -5.0f}, {1.0f,1.0f}},//右下 インデックス2
+		{{ 5.0f,5.0f,-5.0f},   {1.0f,0.0f}},//右上 インデックス3
+		//下
+		{{ -5.0f,-5.0f,5.0f},   {0.0f,1.0f}},//左下 インデックス0
+		{{ 5.0f ,-5.0f,5.0f},   {0.0f,0.0f}},//左上 インデックス1
+		{{ -5.0f,-5.0f,-5.0f},  {1.0f,1.0f}},//右下 インデックス2
+		{{ 5.0f,-5.0f,-5.0f},   {1.0f,0.0f}},//右上 インデックス3
+
 	};
 
 	//三角形のインデックスデータ
@@ -301,6 +331,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	{
 		0,1,2,//三角形1
 		1,2,3,//三角形2
+		//後
+		4,5,6,//三角形３
+		5,6,7,//三角形４
+		//左
+		8,9,10,
+		9,10,11,
+		//右
+		12,13,14,
+		13,14,15,
+		//上
+		16,17,18,
+		17,18,19,
+		//下
+		20,21,22,
+		21,22,23,
 	};
 
 
@@ -450,7 +495,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;//RBGA全てのチャンネルを描画
 
 	//共通設定
-	blenddesc.BlendEnable = true; //ブレンドを有効にする
+	blenddesc.BlendEnable = false; //ブレンドを有効にする
 	blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;//加算
 	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;//ソースの値を100％使う
 	blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;//デストの値を0％使う
@@ -460,15 +505,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	//blenddesc.SrcBlend = D3D12_BLEND_ONE;//ソースの値を100％使う
 	//blenddesc.DestBlend= D3D12_BLEND_ZERO;//デストの値を0％使う
 
-	////減算合成
-	//blenddesc.BlendOp = D3D12_BLEND_OP_REV_SUBTRACT;//減算
-	//blenddesc.SrcBlend = D3D12_BLEND_ONE;//ソースの値を100％使う
-	//blenddesc.DestBlend = D3D12_BLEND_ZERO;//デストの値を0％使う
+	//減算合成
+	blenddesc.BlendOp = D3D12_BLEND_OP_REV_SUBTRACT;//減算
+	blenddesc.SrcBlend = D3D12_BLEND_ONE;//ソースの値を100％使う
+	blenddesc.DestBlend = D3D12_BLEND_ZERO;//デストの値を0％使う
 
 	////色反転
-	//blenddesc.BlendOp = D3D12_BLEND_OP_REV_SUBTRACT;//加算
-	//blenddesc.SrcBlend = D3D12_BLEND_INV_DEST_COLOR;//1.0f-デストカラーの値
-	//blenddesc.DestBlend = D3D12_BLEND_ZERO;//使わない
+	blenddesc.BlendOp = D3D12_BLEND_OP_REV_SUBTRACT;//加算
+	blenddesc.SrcBlend = D3D12_BLEND_INV_DEST_COLOR;//1.0f-デストカラーの値
+	blenddesc.DestBlend = D3D12_BLEND_ZERO;//使わない
 
 	//半透明合成
 	blenddesc.BlendOp = D3D12_BLEND_OP_ADD;//加算
@@ -620,7 +665,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 
 	//値を書き込むと自動的に転送される
-	constMapMaterial->color = XMFLOAT4(1, 0, 0, 0.5f);
+	constMapMaterial->color = XMFLOAT4(1, 1, 1, 1);
 
 
 
@@ -628,7 +673,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	ScratchImage scratchImg{};
 	// WICテクスチャのロード
 	result = LoadFromWICFile(
-		L"Resources/mario.jpg",  
+		L"Resources/mario.jpg",
 		WIC_FLAGS_NONE,
 		&metadata, scratchImg);
 	ScratchImage mipChain{};
@@ -855,7 +900,50 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	// パイプラインにルートシグネチャをセット
 	pipelineDesc.pRootSignature = rootSignature;
 
-
+	//リソース設定
+	D3D12_RESOURCE_DESC depthResourceDesc{};
+	depthResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+	depthResourceDesc.Width = window_width;
+	depthResourceDesc.Height = window_height;
+	depthResourceDesc.DepthOrArraySize = 1;
+	depthResourceDesc.Format = DXGI_FORMAT_D32_FLOAT;
+	depthResourceDesc.SampleDesc.Count = 1;
+	depthResourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
+	//深度値用ヒーププロパティ
+	D3D12_HEAP_PROPERTIES depthHeapProp{};
+	depthHeapProp.Type = D3D12_HEAP_TYPE_DEFAULT;
+	D3D12_CLEAR_VALUE depthClearValue{};
+	depthClearValue.DepthStencil.Depth = 1.0f;
+	depthClearValue.Format = DXGI_FORMAT_D32_FLOAT;
+	//リソース生産
+	ID3D12Resource* depthBuff = nullptr;
+	result = device->CreateCommittedResource(
+		&depthHeapProp,
+		D3D12_HEAP_FLAG_NONE,
+		&depthResourceDesc,
+		D3D12_RESOURCE_STATE_DEPTH_WRITE,
+		&depthClearValue,
+		IID_PPV_ARGS(&depthBuff));
+	//深度ビュー用デスクリプタヒープ作成
+	D3D12_DESCRIPTOR_HEAP_DESC dsvHeapDesc{};
+	dsvHeapDesc.NumDescriptors = 1;
+	dsvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
+	ID3D12DescriptorHeap* dsvHeap = nullptr;
+	result = device->CreateDescriptorHeap(&dsvHeapDesc, IID_PPV_ARGS(&dsvHeap));
+	//深度ビュー作成
+	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
+	dsvDesc.Format = DXGI_FORMAT_D32_FLOAT;
+	dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
+	device->CreateDepthStencilView(
+		depthBuff,
+		&dsvDesc,
+		dsvHeap->GetCPUDescriptorHandleForHeapStart()
+	);
+	//デプスステンシルステートの設定
+	pipelineDesc.DepthStencilState.DepthEnable = true;
+	pipelineDesc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
+	pipelineDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
+	pipelineDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
 	// パイプランステートの生成
 	ID3D12PipelineState* pipelineState = nullptr;
 	result = device->CreateGraphicsPipelineState(&pipelineDesc, IID_PPV_ARGS(&pipelineState));
@@ -901,8 +989,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	ibView.Format = DXGI_FORMAT_R16_UINT;
 	ibView.SizeInBytes = sizeIB;
 
-
-
+	
 
 	//描画初期化処理ここまで
 
@@ -924,7 +1011,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		}
 
 		//DIRECTX毎フレーム処理ここから 
-		
+
 		//キーボード処理の取得開始
 		keyboard->Acquire();
 
@@ -964,25 +1051,25 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 			if (key[DIK_UP]) { position.z += 1.0f; }
 			else if (key[DIK_DOWN]) { position.z -= 1.0f; }
 			if (key[DIK_RIGHT]) { position.x += 1.0f; }
-			else if (key[DIK_LEFT]) { position.x-= 1.0f; }
+			else if (key[DIK_LEFT]) { position.x -= 1.0f; }
 		}
 		matWorld;
 		//matWorldに単位行列を代入
 		matWorld = XMMatrixIdentity();
 
 		//ワールド行列に単位行列を代入する処理
-		 matScale;//スケーリング行列
+		matScale;//スケーリング行列
 		matScale = XMMatrixScaling(1.0f, 0.5f, 1.0f);
 		matWorld *= matScale;//ワールド行列にスケーリングを反映
 
-		 matRot;//回転行列
+		matRot;//回転行列
 		matRot = XMMatrixIdentity();
 		matRot *= XMMatrixRotationZ(XMConvertToRadians(0.0f));
 		matRot *= XMMatrixRotationX(XMConvertToRadians(15.0f));
 		matRot *= XMMatrixRotationY(XMConvertToRadians(30.0f));
 		matWorld *= matRot;//ワールド行列に回転を反映
 
-		 matTrans;
+		matTrans;
 		matTrans = XMMatrixTranslation(position.x, position.y, position.z);
 		matWorld *= matTrans;
 
@@ -1007,19 +1094,23 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		// 1.リソースバリアで書き込み可能に変更
 		D3D12_RESOURCE_BARRIER barrierDesc{};
 		barrierDesc.Transition.pResource = backBuffers[bbIndex]; // バックバッファを指定
-		barrierDesc.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT; 
-		barrierDesc.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET; 
+		barrierDesc.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
+		barrierDesc.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
 		commandList->ResourceBarrier(1, &barrierDesc);
 
 		// 2.描画先の変更
 		//レンダーターゲットビューのハンドル取得
 		D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = rtvHeap->GetCPUDescriptorHandleForHeapStart();
 		rtvHandle.ptr += bbIndex * device->GetDescriptorHandleIncrementSize(rtvHeapDesc.Type);
-		commandList->OMSetRenderTargets(1, &rtvHandle, false, nullptr);
+		D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dsvHeap->GetCPUDescriptorHandleForHeapStart();
+		commandList->OMSetRenderTargets(1, &rtvHandle, false, &dsvHandle);
+
 
 		// 3.画面クリア
-		FLOAT clearColor[] = { 0.1f,0.25f, 0.5f,0.0f }; 
+		FLOAT clearColor[] = { 0.1f,0.25f, 0.5f,0.0f };
 		commandList->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
+		commandList->ClearDepthStencilView(dsvHandle,D3D12_CLEAR_FLAG_DEPTH,1.0f,0,0,nullptr);
+
 
 
 
